@@ -28,7 +28,16 @@ namespace SampleReSharperPlugin
                 {
                     twi.QueryClose.Value = true;
                     
-                    var myToolPanel = new ToolPanel();
+                    var toolPanel = new ToolPanel();
+
+                    // Tool Window
+                    var toolwndView = new ToolWindowView();
+                    var toolwndViewTab = new TabItem
+                    {
+                        Content = toolwndView,
+                        Header = toolwndView.Name
+                    };
+                    toolPanel.tabControl.Items.Add(toolwndViewTab);
 
                     // Options 
                     var optionsPageViewModel = new OptionsPageViewModel(lt, settingsStore);
@@ -36,9 +45,9 @@ namespace SampleReSharperPlugin
                     var optionsPageViewTab = new TabItem
                     {
                         Content = optionsPageView,
-                        Header = optionsPageViewModel.Name                        
+                        Header = optionsPageView.Name                        
                     };
-                    myToolPanel.tabControl.Items.Add(optionsPageViewTab);
+                    toolPanel.tabControl.Items.Add(optionsPageViewTab);
 
                     // Actions
                     var actionsViewModel = new ActionsViewModel(lt);
@@ -46,11 +55,40 @@ namespace SampleReSharperPlugin
                     var actionsViewTab = new TabItem
                     {
                         Content = actionsView,
-                        Header = actionsViewModel.Name
+                        Header = actionsView.Name
                     };
-                    myToolPanel.tabControl.Items.Add(actionsViewTab);
+                    toolPanel.tabControl.Items.Add(actionsViewTab);
 
-                    return new EitherControl(lt, myToolPanel);                    
+                    // Solution Component
+                    var solcompView = new SolutionComponentView();
+                    var solcompViewTab = new TabItem
+                    {
+                        Content = solcompView,
+                        Header = solcompView.Name
+                    };
+                    toolPanel.tabControl.Items.Add(solcompViewTab);
+
+                    // Signals
+                    var sigViewModel = new SignalsViewModel(lt);
+                    var sigView = new SignalsView {DataContext = sigViewModel};
+                    var sigViewTab = new TabItem
+                    {
+                        Content = sigView,
+                        Header = sigView.Name
+                    };
+                    toolPanel.tabControl.Items.Add(sigViewTab);
+
+                    // IProperty
+                    var propViewModel = new PropertyViewModel(lt);
+                    var propView = new PropertyView { DataContext = propViewModel };
+                    var propViewTab = new TabItem
+                    {
+                        Content = propView,
+                        Header = propView.Name
+                    };
+                    toolPanel.tabControl.Items.Add(propViewTab);
+
+                    return new EitherControl(lt, toolPanel);                    
                 });
         }
 

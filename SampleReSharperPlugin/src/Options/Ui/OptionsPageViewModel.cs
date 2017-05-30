@@ -6,9 +6,7 @@ namespace SampleReSharperPlugin
 {
     public class OptionsPageViewModel: AAutomation    
     {
-        public IProperty<string> Text { get; set; }
-
-        public string Name => "Options";
+        public IProperty<string> Text { get; set; }        
 
         public OptionsPageViewModel(Lifetime lifetime, ISettingsStore settingsStore)
         {

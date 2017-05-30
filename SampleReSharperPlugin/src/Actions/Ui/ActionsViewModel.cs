@@ -6,8 +6,7 @@ namespace SampleReSharperPlugin
 {
     public class ActionsViewModel: AAutomation
     {
-        private readonly Lifetime _lifetime;
-        public string Name => "Actions";
+        private readonly Lifetime _lifetime;        
 
         public ActionsViewModel(Lifetime lifetime)
         {

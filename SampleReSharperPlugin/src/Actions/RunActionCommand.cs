@@ -2,8 +2,10 @@ using System;
 using System.Windows.Input;
 using JetBrains.ActionManagement;
 using JetBrains.Annotations;
+using JetBrains.Application;
 using JetBrains.DataFlow;
 using JetBrains.ReSharper.Resources.Shell;
+using JetBrains.Threading;
 using JetBrains.UI.ActionsRevised;
 
 namespace SampleReSharperPlugin
@@ -31,7 +33,14 @@ namespace SampleReSharperPlugin
         public void ExecuteCommand<T>() where T : IExecutableAction
         {            
             var actionManager = Shell.Instance.GetComponent<IActionManager>();
-            actionManager.ExecuteActionAsync<T>(_lifetime);            
+            actionManager.ExecuteActionAsync<T>(_lifetime);           
+
+            var shellLocks = Shell.Instance.GetComponent<IShellLocks>();
+            shellLocks.ExecuteOrQueue(_lifetime, "ExecuteAction", () =>
+            {
+                actionManager.ExecuteAction<ShowMessageBoxAction>();
+            });
+
         }
 
 
