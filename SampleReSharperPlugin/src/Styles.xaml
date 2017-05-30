@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="TipStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#232323" />
+        <Setter Property="Background" Value="#EDE1A2"/>
+        <Setter Property="Margin" Value="5 5 5 0"/>
+        <Setter Property="Padding" Value="5 5 5 5"/>
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+</ResourceDictionary>
