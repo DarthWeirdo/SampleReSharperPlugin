@@ -338,6 +338,10 @@
     <Compile Include="src\ToolWindow\Ui\ToolWindowView.xaml.cs">
       <DependentUpon>ToolWindowView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\UiThemes\Ui\UiThemeView.xaml.cs">
+      <DependentUpon>UiThemeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\UiThemes\Ui\UiThemeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -372,6 +376,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\ToolWindow\Ui\ToolWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\UiThemes\Ui\UiThemeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

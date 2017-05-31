@@ -4,14 +4,13 @@ using JetBrains.UI.Wpf;
 
 namespace SampleReSharperPlugin
 {
-    [ShellComponent]
     public class PropertyProvider
     {
         public IProperty<int> SomeIntProperty { get; set; }
 
         public PropertyProvider(Lifetime lifetime)
         {
-            SomeIntProperty = new Property<int>(lifetime, "PropertyProvider.SomeIntProperty") {Value = 0};
+            SomeIntProperty = new Property<int>(lifetime, "PropertyProvider.SomeIntProperty") { Value = 0 };
         }
     }
 }

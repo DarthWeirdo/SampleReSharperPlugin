@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Windows.Controls;
+using JetBrains.ActionManagement;
 using JetBrains.Application.Settings;
 using JetBrains.DataFlow;
 using JetBrains.Threading;
 using JetBrains.UI.Application;
+using JetBrains.UI.Components.Theming;
 using JetBrains.UI.Controls;
 using JetBrains.UI.CrossFramework;
 using JetBrains.UI.ToolWindowManagement;
@@ -14,20 +16,21 @@ namespace SampleReSharperPlugin
     public class SampleToolWindow
     {
         private readonly TabbedToolWindowClass _toolWindowClass;
-        private readonly ToolWindowInstance _toolWindowInstance;        
+        private readonly ToolWindowInstance _toolWindowInstance;
 
         public SampleToolWindow(Lifetime lifetime, ToolWindowManager toolWindowManager,
-            SampleToolWindowDescriptor sampleToolWindowDescriptor, ISettingsStore settingsStore)
+            SampleToolWindowDescriptor sampleToolWindowDescriptor, ISettingsStore settingsStore,
+            IColorThemeManager colorThemeManager)
         {
             _toolWindowClass = toolWindowManager.Classes[sampleToolWindowDescriptor] as TabbedToolWindowClass;
             if (_toolWindowClass == null)
-                throw new ApplicationException("ToolWindowClass");                        
+                throw new ApplicationException("ToolWindowClass");
 
             _toolWindowInstance = _toolWindowClass.RegisterInstance(lifetime, "Sample Tool Window", null,
                 (lt, twi) =>
                 {
                     twi.QueryClose.Value = true;
-                    
+
                     var toolPanel = new ToolPanel();
 
                     // Tool Window
@@ -45,7 +48,7 @@ namespace SampleReSharperPlugin
                     var optionsPageViewTab = new TabItem
                     {
                         Content = optionsPageView,
-                        Header = optionsPageView.Name                        
+                        Header = optionsPageView.Name
                     };
                     toolPanel.tabControl.Items.Add(optionsPageViewTab);
 
@@ -80,7 +83,7 @@ namespace SampleReSharperPlugin
 
                     // IProperty
                     var propViewModel = new PropertyViewModel(lt);
-                    var propView = new PropertyView { DataContext = propViewModel };
+                    var propView = new PropertyView {DataContext = propViewModel};
                     var propViewTab = new TabItem
                     {
                         Content = propView,
@@ -88,16 +91,23 @@ namespace SampleReSharperPlugin
                     };
                     toolPanel.tabControl.Items.Add(propViewTab);
 
-                    return new EitherControl(lt, toolPanel);                    
+                    // UI Themes
+                    var uithemeViewModel = new UiThemeViewModel(lt, colorThemeManager);
+                    var uithemeView = new UiThemeView {DataContext = uithemeViewModel};
+                    var uithemeViewTab = new TabItem
+                    {
+                        Content = uithemeView,
+                        Header = uithemeView.Name
+                    };
+                    toolPanel.tabControl.Items.Add(uithemeViewTab);
+
+                    return new EitherControl(lt, toolPanel);
                 });
         }
 
         public void Show()
-        {            
+        {
             _toolWindowClass.Show();
         }
-
-
-
     }
 }

@@ -16,8 +16,8 @@ namespace SampleReSharperPlugin
             // SomeIntProperty of the PropertyProvider shell component is updated via the SomeIntProperty of PropertyViewModel
             // which, in turn, is updated from PropertyView via WPF binding
             SomeIntProperty = new Property<int>(lifetime, "PropertyViewModel.SomeIntProperty") {Value = 0};
-
-            var propProvider = Shell.Instance.GetComponent<PropertyProvider>();
+            
+            var propProvider = new PropertyProvider(lifetime);
 
             SomeIntProperty.FlowInto(lifetime, propProvider.SomeIntProperty);
             

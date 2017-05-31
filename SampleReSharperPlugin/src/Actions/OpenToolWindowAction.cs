@@ -5,6 +5,7 @@ using JetBrains.Application.Settings.Store.Implementation;
 using JetBrains.DataFlow;
 using JetBrains.UI.ActionsRevised;
 using JetBrains.UI.Application;
+using JetBrains.UI.Components.Theming;
 using JetBrains.UI.MenuGroups;
 using JetBrains.UI.ToolWindowManagement;
 
@@ -18,7 +19,8 @@ namespace SampleReSharperPlugin
             var lifetime = context.GetComponent<Lifetime>();
             var toolWindowManager = context.GetComponent<ToolWindowManager>();
             var toolWindowDescriptor = context.GetComponent<SampleToolWindowDescriptor>();
-            var settingsStore = context.GetComponent<SettingsStore>();            
+            var settingsStore = context.GetComponent<SettingsStore>();
+            var colorThemeManager = context.GetComponent<IColorThemeManager>();
             ToolWindowInstance[] instances = null;
 
             foreach (var @class in toolWindowManager.Classes.Classes)
@@ -33,7 +35,8 @@ namespace SampleReSharperPlugin
 
             if (instances.Length == 0)
             {
-                var toolWindow = new SampleToolWindow(lifetime, toolWindowManager, toolWindowDescriptor, settingsStore);
+                var toolWindow = new SampleToolWindow(lifetime, toolWindowManager, toolWindowDescriptor, settingsStore,
+                    colorThemeManager);
                 toolWindow.Show();
             }
             else

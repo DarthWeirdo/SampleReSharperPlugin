@@ -17,7 +17,7 @@ namespace SampleReSharperPlugin
             });
 
             _propertyProvider.SomeIntProperty.Change.Advise_HasNew(lifetime,
-                val => MessageBox.ShowInfo($"New property value is {val}"));           
+                val => MessageBox.ShowInfo($"New property value is {val.New}"));           
         }
 
         public void ChangePropertyValue(int value)
