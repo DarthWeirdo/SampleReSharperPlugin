@@ -62,6 +62,33 @@ namespace SampleReSharperPlugin
                     };
                     toolPanel.tabControl.Items.Add(actionsViewTab);
 
+                    // Context Action                    
+                    var contextActionView = new ToLowerCaseContextActionView();
+                    var contextActionViewTab = new TabItem
+                    {
+                        Content = contextActionView,
+                        Header = contextActionView.Name
+                    };
+                    toolPanel.tabControl.Items.Add(contextActionViewTab);
+
+                    // Quick Fix
+                    var quickFixView = new CorrectBadWordQuickFixView();
+                    var quickFixViewTab = new TabItem
+                    {
+                        Content = quickFixView,
+                        Header = quickFixView.Name
+                    };
+                    toolPanel.tabControl.Items.Add(quickFixViewTab);
+
+                    // Element Problem Analyzer and Code Highlighting
+                    var problemAnalyzerView = new BadWordNamingView();
+                    var problemAnalyzerViewTab = new TabItem
+                    {
+                        Content = problemAnalyzerView,
+                        Header = problemAnalyzerView.Name
+                    };
+                    toolPanel.tabControl.Items.Add(problemAnalyzerViewTab);
+
                     // Solution Component
                     var solcompView = new SolutionComponentView();
                     var solcompViewTab = new TabItem
