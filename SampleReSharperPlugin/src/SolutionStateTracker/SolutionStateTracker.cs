@@ -4,6 +4,7 @@ using JetBrains.Application;
 using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Tasks;
+using JetBrains.ReSharper.Resources.Shell;
 
 namespace SampleReSharperPlugin
 {
@@ -16,11 +17,13 @@ namespace SampleReSharperPlugin
 
         public IProperty<string> SolutionName;
 
+        public static SolutionStateTracker Instance => Shell.Instance.GetComponent<SolutionStateTracker>();
+
         public SolutionStateTracker([NotNull] Lifetime lifetime)
         {
             AfterSolutionOpened = new Signal<ISolution>(lifetime, "SolutionStateTracker.AfterSolutionOpened");
             BeforeSolutionClosed = new Signal<ISolution>(lifetime, "SolutionStateTracker.BeforeSolutionClosed");
-            SolutionName = new Property<string>(lifetime, "SolutionStateTracker.SolutionName") { Value = "None" };
+            SolutionName = new Property<string>(lifetime, "SolutionStateTracker.SolutionName") { Value = "None" };            
         }
 
         private void HandleSolutionOpened(ISolution solution)

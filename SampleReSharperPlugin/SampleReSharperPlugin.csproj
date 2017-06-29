@@ -326,8 +326,15 @@
       <DependentUpon>OptionsPageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\Options\Ui\OptionsPageViewModel.cs" />
-    <Compile Include="src\PsiNavigation\PsiNavigationHelper.cs" />
     <Compile Include="src\ElementProblemAnalyzer\BadWordNamingWarning.cs" />
+    <Compile Include="src\PsiNavigation\NavigateByReference.cs" />
+    <Compile Include="src\PsiNavigation\NavigateToParentMethod.cs" />
+    <Compile Include="src\PsiNavigation\PsiExtensionMethods.cs" />
+    <Compile Include="src\PsiNavigation\NodeUnderCaretDetector.cs" />
+    <Compile Include="src\PsiNavigation\Ui\PsiNavigationView.xaml.cs">
+      <DependentUpon>PsiNavigationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\PsiNavigation\Ui\PsiNavigationViewModel.cs" />
     <Compile Include="src\QuickFix\CorrectBadWordQuickFix.cs" />
     <Compile Include="src\QuickFix\Ui\CorrectBadWordQuickFixView.xaml.cs">
       <DependentUpon>CorrectBadWordQuickFixView.xaml</DependentUpon>
@@ -376,6 +383,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\IProperty\Ui\PropertyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\PsiNavigation\Ui\PsiNavigationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

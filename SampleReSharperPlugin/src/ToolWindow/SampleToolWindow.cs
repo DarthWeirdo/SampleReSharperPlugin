@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Windows.Controls;
 using JetBrains.ActionManagement;
+using JetBrains.Application;
 using JetBrains.Application.Settings;
 using JetBrains.DataFlow;
+using JetBrains.DocumentManagers;
+using JetBrains.ReSharper.Resources.Shell;
+using JetBrains.TextControl;
 using JetBrains.Threading;
 using JetBrains.UI.Application;
 using JetBrains.UI.Components.Theming;
@@ -61,6 +65,16 @@ namespace SampleReSharperPlugin
                         Header = actionsView.Name
                     };
                     toolPanel.tabControl.Items.Add(actionsViewTab);
+
+                    // PSI Navigation                                        
+                    var psiNavigationViewModel = new PsiNavigationViewModel(lt);
+                    var psiNavigationView = new PsiNavigationView {DataContext = psiNavigationViewModel};
+                    var psiNavigationViewTab = new TabItem
+                    {
+                        Content = psiNavigationView,
+                        Header = psiNavigationView.Name
+                    };
+                    toolPanel.tabControl.Items.Add(psiNavigationViewTab);
 
                     // Context Action                    
                     var contextActionView = new ToLowerCaseContextActionView();
