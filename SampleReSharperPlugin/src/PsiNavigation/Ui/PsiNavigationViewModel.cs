@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using JetBrains.Annotations;
 using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
 using JetBrains.UI.Wpf;
@@ -51,27 +50,6 @@ namespace SampleReSharperPlugin
                                    .ToList() ?? new List<string> {"No references"};
                     });
             });
-        }
-
-        //public void Refresh()
-        //{
-        //    var solutionStateTracker = SolutionStateTracker.Instance;
-        //    var solution = solutionStateTracker.Solution;
-        //    if (solution == null) return;
-
-        //    var psiServices = solution.GetPsiServices();
-
-        //    psiServices.AsyncFinder.
-
-        //    psiServices.Locks.ExecuteOrQueueReadLock(_lifetime, "Refresh lists",
-        //        () =>
-        //        {
-        //            //if (psiServices.Caches.WaitForCaches("PsiNavigationViewModel"))
-        //            psiServices.Files.CommitAllDocumentsAsync(() =>
-        //            {
-        //                TypesNodesList.Value = solution.GetTypeDeclarationsForOpenedProject();
-        //            });
-        //        });
-        //}
+        }        
     }
 }

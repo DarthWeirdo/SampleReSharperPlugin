@@ -1,15 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using JetBrains.Application;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Model2.Assemblies.Interfaces;
+using JetBrains.ReSharper.Feature.Services.Navigation.NavigationExtensions;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Css.Tree;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Files;
 using JetBrains.ReSharper.Psi.Modules;
+using JetBrains.ReSharper.Psi.Paths;
 using JetBrains.ReSharper.Psi.Resx.ResourceDefaultLanguage;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
@@ -17,76 +21,68 @@ using JetBrains.Util;
 namespace SampleReSharperPlugin
 {
     public static class PsiExtensionMethods
-    {        
+    {
         [CanBeNull]
-        private static IEnumerable<IPsiSourceFile> GetPsiSourceFiles([NotNull] this ISolution solution)
-        {            
-            var psiServices = solution.GetPsiServices();                                   
-
-            var modules = psiServices.Modules.GetModules();                                                
-
-            var psiSourceFiles = new List<IPsiSourceFile>();
-
-            foreach (var psiModule in modules)
-                psiSourceFiles.AddRange(psiModule.SourceFiles);
-
-            return psiSourceFiles;
+        public static IProject GetProjectByName(this ISolution solution, string projectName)
+        {
+            var projects = solution.GetTopLevelProjects();
+            return projects.FirstOrDefault(project => project.Name == projectName);
         }
 
 
         [CanBeNull]
-        private static IEnumerable<ICSharpFile> GetFilesForOpenedProject([NotNull] this ISolution solution)
+        public static ICSharpFile GetCSharpFile(this IProject project, string filename)
         {
-            var psiSourceFiles = solution.GetPsiSourceFiles();            
-
-            if (psiSourceFiles == null) return null;
-
-            var files = new List<ICSharpFile>();
-
-            foreach (var psiSourceFile in psiSourceFiles)
-                files.AddRange(psiSourceFile.GetPsiFiles<CSharpLanguage>().SafeOfType<ICSharpFile>());
-
-            return files;
+            var file = project.GetPsiSourceFileInProject(FileSystemPath.Parse(filename));
+            return file?.GetPsiFiles<CSharpLanguage>().SafeOfType<ICSharpFile>().SingleOrDefault();
         }
 
 
         [CanBeNull]
-        public static IEnumerable<ICSharpTypeDeclaration> GetTypeDeclarationsForOpenedProject(
-            [NotNull] this ISolution solution)
+        public static ITreeNode GetTypeTreeNodeByFqn(this ICSharpFile file, string typeName)
         {
-            var files = solution.GetFilesForOpenedProject();
-            if (files == null) return null;
+            var namespaceName = GetLongNameFromFqn(typeName);
+            var shortName = GetShortNameFromFqn(typeName);            
 
-            var types = new List<ICSharpTypeDeclaration>();
+            var namespaceDecls = file.NamespaceDeclarationsEnumerable;
+            var namespaceDecl = (from decl in namespaceDecls
+                where decl.DeclaredName == namespaceName
+                select decl).FirstOrDefault();
 
-            foreach (var file in files)
-                types.AddRange(file.TypeDeclarationsEnumerable);
+            if (namespaceDecl == null) return null;
+            var typeDecls = namespaceDecl.TypeDeclarationsEnumerable;
 
-            return types;
+            var resultList = (from node in typeDecls
+                where node.DeclaredName == shortName
+                select node).ToList();
+
+            return resultList.FirstOrDefault();
         }
 
 
-        [CanBeNull]
-        public static IEnumerable<T> GetMemberDeclarations<T>(
-            [NotNull] this ICSharpTypeDeclaration typeDeclaration) where T : class, IClassMemberDeclaration
+        public static void NavigateToTypeNodeByFqn(this ISolution solution, string projectName, string fileName, string typeName)
         {
-            //   var genType = typeof(T);
+            solution.Locks.TryExecuteWithReadLock(() =>
+            {
+                var project = solution.GetProjectByName(projectName);
+                var file = project.GetCSharpFile(fileName);
+                var node = file.GetTypeTreeNodeByFqn(typeName);
+                node.NavigateToTreeNode(true);
+            });            
+        }
 
-            //var classDeclaration = (IClassDeclaration) typeDeclaration;
 
-            //if (genType == typeof(IMethodDeclaration))
-            //{
-            //    var result = classDeclaration.MethodDeclarationsEnumerable;
-            //    return (IEnumerable<T>) (IEnumerable<IMethodDeclaration>)result;
-            //}
-            //else
-            //{
-                //var result = from declaration in typeDeclaration.MemberDeclarations
-                //    where declaration as T == true
-                //    select declaration;                
-            //}
+        private static string GetShortNameFromFqn(string fqn)
+        {
+            var pos = fqn.LastIndexOf(".", StringComparison.Ordinal) + 1;
+            return pos > 0 ? fqn.Substring(pos) : fqn;
+        }
 
-            return Enumerable.OfType<T>(typeDeclaration.MemberDeclarations);
+
+        private static string GetLongNameFromFqn(string fqn)
+        {
+            var pos = fqn.LastIndexOf(".", StringComparison.Ordinal) + 1;
+            return pos > 0 ? fqn.Substring(0, pos - 1) : fqn;
         }
 
 
@@ -94,10 +90,10 @@ namespace SampleReSharperPlugin
         public static IEnumerable<IDeclaredElement> GetReferencedElements(this ITreeNode node)
         {
             var result = new List<IDeclaredElement>();
-            var parentExpression = node.GetParentOfType<IExpression>();
-            if (parentExpression == null) return null;            
-                                  
-            var references = parentExpression.GetReferences();            
+            var parentExpression = node.GetParentOfType<IReferenceExpression>();
+            if (parentExpression == null) return null;
+
+            var references = parentExpression.GetReferences();
 
             foreach (var reference in references)
             {

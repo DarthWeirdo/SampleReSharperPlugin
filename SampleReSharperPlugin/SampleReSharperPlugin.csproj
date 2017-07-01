@@ -327,10 +327,11 @@
     </Compile>
     <Compile Include="src\Options\Ui\OptionsPageViewModel.cs" />
     <Compile Include="src\ElementProblemAnalyzer\BadWordNamingWarning.cs" />
-    <Compile Include="src\PsiNavigation\NavigateByReference.cs" />
-    <Compile Include="src\PsiNavigation\NavigateToParentMethod.cs" />
+    <Compile Include="src\PsiNavigation\Ui\NavigateByReference.cs" />
+    <Compile Include="src\PsiNavigation\Ui\NavigateToParentMethod.cs" />
     <Compile Include="src\PsiNavigation\PsiExtensionMethods.cs" />
     <Compile Include="src\PsiNavigation\NodeUnderCaretDetector.cs" />
+    <Compile Include="src\PsiNavigation\NavigateToCtorProvider.cs" />
     <Compile Include="src\PsiNavigation\Ui\PsiNavigationView.xaml.cs">
       <DependentUpon>PsiNavigationView.xaml</DependentUpon>
     </Compile>

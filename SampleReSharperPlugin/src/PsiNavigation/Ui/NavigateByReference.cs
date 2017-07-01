@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
-using JetBrains.Common.Util;
-using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.Feature.Services.Navigation;
-using JetBrains.Util;
 
 namespace SampleReSharperPlugin
 {
