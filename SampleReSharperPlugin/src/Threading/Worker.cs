@@ -10,9 +10,7 @@ namespace SampleReSharperPlugin
 
         public Worker(Lifetime lifetime, IThreading threading, IShellLocks shellLocks)
         {
-            //shellLocks.thre
-            //var task = threading.Tasks.
-            
+            // under construction                        
         }
 
 

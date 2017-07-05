@@ -111,7 +111,7 @@ namespace SampleReSharperPlugin
 
             var range = new TextRange(textControl.Caret.Offset());
 
-            var psiSourceFile = projectFile.ToSourceFile().NotNull("File is null");
+            var psiSourceFile = projectFile.ToSourceFile().NotNull("File is null");            
 
             var documentRange = range.CreateDocumentRange(projectFile);
             var file = psiSourceFile.GetPsiFile(psiSourceFile.PrimaryPsiLanguage, documentRange);

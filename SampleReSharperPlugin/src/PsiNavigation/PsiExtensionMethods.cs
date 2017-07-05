@@ -32,7 +32,7 @@ namespace SampleReSharperPlugin
 
         [CanBeNull]
         public static ICSharpFile GetCSharpFile(this IProject project, string filename)
-        {
+        {            
             var file = project.GetPsiSourceFileInProject(FileSystemPath.Parse(filename));
             return file?.GetPsiFiles<CSharpLanguage>().SafeOfType<ICSharpFile>().SingleOrDefault();
         }
@@ -61,10 +61,10 @@ namespace SampleReSharperPlugin
 
 
         public static void NavigateToTypeNodeByFqn(this ISolution solution, string projectName, string fileName, string typeName)
-        {
+        {                        
             solution.Locks.TryExecuteWithReadLock(() =>
             {
-                var project = solution.GetProjectByName(projectName);
+                var project = solution.GetProjectByName(projectName);                
                 var file = project.GetCSharpFile(fileName);
                 var node = file.GetTypeTreeNodeByFqn(typeName);
                 node.NavigateToTreeNode(true);
